@@ -39,7 +39,9 @@ app.post('/files', function (request, response) {
     response.send('upload file to server');
 })
 
-app.set("views", path.join(__dirname, "./"))
+app.set("views", path.join(__dirname, "./static"))
+app.use('./static',express.static(path.resolve(__dirname,"./")));
+app.use(express.static("assets"));
 app.set('view engine', 'ejs');
 //upload single file to server
 app.get('/', function (request, response) {
