@@ -1,0 +1,14 @@
+{
+  "name": "file-manager",
+  "version": "1.0.0",
+  "description": "this package is a simple file share web app",
+  "main": "file-index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "j_jiasheng@qq.com",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2"
+  }
+}
