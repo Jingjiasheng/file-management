@@ -15,7 +15,6 @@ app.get('/files', (_request, response) => {
         files.push(file)
         console.log(file); 
     })
-
     response.send({
         file_list: files
     })
@@ -26,7 +25,7 @@ app.get('/files', (_request, response) => {
 app.get('/download/:fileName', (request, response) => {
     const { fileName } = request.params;
     const filePath = path.join(file_root, fileName);    
-    if(fs.statSync(filePath).isFile){
+    if(fs.statSync(filePath).isFile()){
         response.download(filePath);
     } 
     else {
@@ -36,7 +35,14 @@ app.get('/download/:fileName', (request, response) => {
 
 //upload single file to server
 app.post('/files', function (request, response) {
-    response.send('upload file to server')
+    response.send('upload file to server');
+})
+
+app.set("views", path.join(__dirname, "./"))
+app.set('view engine', 'ejs');
+//upload single file to server
+app.get('/', function (request, response) {
+    response.render("index");
 })
 
 // start server and bind port

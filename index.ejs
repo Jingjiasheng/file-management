@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./ali.css">
+    <link rel="stylesheet" href="my.css">
+    <link rel="stylesheet" href="file-list.css">
+    <title>Document</title>
+</head>
+ 
+<body>
+
+    <!-- The part of Upload file -->
+    <div class="form-wrapper">
+        <div class="header">
+            File Manager
+        </div>
+        <div class="input-wrapper">
+            <div class="border-wrapper">
+                <input type="button" name="username" id="upload" value="Upload File" class="border-item" autocomplete="off">
+                <input type="file" name="username" id="upload-file" value="Upload File" class="border-item" autocomplete="off" hidden>
+            </div>
+            <div class="border-wrapper">
+                <input type="button" name="password" id="download" value="Download File" class="border-item" autocomplete="off">
+            </div>
+        </div>
+        <div class="action">
+            <button class="btn" id="submit">Submit</button>&nbsp&nbsp
+            <button class="btn" id="cancel">Cancel</button>
+        </div>
+
+    </div>
+
+    <!-- The part of download file-list  -->
+    <div class="file-list" id="file-list" hidden>
+        <div class="file-list-header">
+            Recent File
+        </div>
+        <div class="file-list-input-wrapper">
+            <!-- <div class="file-list-border-wrapper">
+                <input type="button" name="username" id="download001" value="report.doc" class="file-list-border-item" autocomplete="off">
+            </div>
+            <div class="file-list-border-wrapper">
+                <input type="button" name="password" id="download" value="background.jpeg" class="file-list-border-item" autocomplete="off">
+            </div>
+            <div class="file-list-border-wrapper">
+                <input type="button" name="password" id="download" value="XiaoZeYouMuFeng.avi" class="file-list-border-item" autocomplete="off">
+            </div>
+            <div class="file-list-border-wrapper">
+                <input type="button" name="password" id="download" value="mysql.conf" class="file-list-border-item" autocomplete="off">
+            </div>
+            <div class="file-list-border-wrapper">
+                <input type="button" name="password" id="download" value="nginx.old.conf" class="file-list-border-item" autocomplete="off">
+            </div> -->
+        </div>
+
+    </div>
+
+</body>
+</html>
+
+<script src="https://code.jquery.com/jquery-3.6.0.slim.min.js" integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI=" crossorigin="anonymous"></script>
+
+<script src="./index.js" ></script>
