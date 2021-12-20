@@ -1,11 +1,12 @@
 import express from 'express';
 import fs from "fs";
 import path from 'path';
+import { config } from './config';
 
 var app = express()
 
 // base file root dir
-const file_root = "./root";
+const file_root = config.file_root_path;
 
 // get file list
 app.get('/files', (_request, response) => {
@@ -46,5 +47,5 @@ app.get('/', function (request, response) {
 })
 
 // start server and bind port
-app.listen(4040)
+app.listen(config.server_port)
 console.log('启动4040')
