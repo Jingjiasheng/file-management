@@ -102,7 +102,7 @@ const appendFileToList = (fileName, fileSize, fileType, fileId) => {
         "<div class='file-list-border-wrapper'>" + 
             "<input type='button' "+
                 "id='" + fileId + 
-                "' value='"+ fileName + ":" + fileSize + " " + fileType + "]" +
+                "' value='"+ fileName + ":" + fileSize + "byte [" + fileType + "]" +
                 "' class='file-list-border-item' autocomplete='off'>" +
         "</div>"
     $(".file-list-input-wrapper").append(item_html);
