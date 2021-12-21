@@ -48,4 +48,9 @@ app.get('/', (_request, response) => response.render("index"));
 
 // start server and bind port
 app.listen(config.server_port)
-console.log(`Server Start In http://${get_local_ip()}:${config.server_port}`)
+if (process.env.NODE_ENV != "prod"){
+    console.log(`Server Start In http://${get_local_ip()}:${config.server_port}`)
+}
+else{
+    console.log("Server start success!");
+}
