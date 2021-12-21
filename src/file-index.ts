@@ -2,6 +2,7 @@ import express from 'express';
 import fs from "fs";
 import path from 'path';
 import { config } from './config';
+import { get_local_ip } from './utils/get_ip';
 
 var app = express()
 
@@ -35,19 +36,16 @@ app.get('/download/:fileName', (request, response) => {
 })
 
 //upload single file to server
-app.post('/files', function (request, response) {
+app.post('/files', (_request, response) => {
     response.send('upload file to server');
 })
 
-app.set("views", path.join(__dirname, "./static"))
-app.use('./static',express.static(path.resolve(__dirname,"./")));
-app.use(express.static("assets"));
+app.use(express.static("static"));
 app.set('view engine', 'ejs');
 //upload single file to server
-app.get('/', function (request, response) {
-    response.render("index");
-})
+app.get('/', (_request, response) => response.render("index"));
+
 
 // start server and bind port
 app.listen(config.server_port)
-console.log('启动4040')
+console.log(`Server Start In http://${get_local_ip()}:${config.server_port}`)

@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "moduleResolution": "node",
+      /** "isolatedModules": true, */
+      "noImplicitThis": true,
+      "strictNullChecks": true,
+      "noEmit": true,
+      "module": "commonjs",
+      "target": "es2017",
+      "esModuleInterop": true,
+      "allowSyntheticDefaultImports": true,
+    },
+    "include": [
+      "src/**/*"
+    ],
+  }
