@@ -4,10 +4,8 @@ WORKDIR /server/
 
 COPY . .
 
-
 RUN npm install \
   && npm install ts-node --global 
-
 
 ENV ROOT_PATH_FILE=/server/root
 ENV NODE_ENV=prod

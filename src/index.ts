@@ -2,16 +2,21 @@ import fs from "fs";
 import path from "path";
 
 import express from "express";
+import multer from "multer";
+import morgan from "morgan";
 
 import { config } from "./config";
 import { getLocalIp } from "./utils/get_ip";
 
 
 const app = express();
+const upload = multer({ dest: "./root" });
+
 
 // base file root dir
 const file_root = config.file_root_path;
 
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 // get file list
 app.get("/files", (_request, response) => {
   const files: string[] = [];
@@ -36,7 +41,15 @@ app.get("/download/:file_name", (request, response) => {
 });
 
 //upload single file to server
-app.post("/files", (_request, response) => {
+app.post("/files", upload.single("file"), (request,  response) => {
+  // const oldpath = request.file.destination + "/" + request.file.filename;
+  // const newpath = request.file.destination + "/" + request.file.originalname;
+  // fs.rename(oldpath,newpath,() => {
+  //   console.log("重命名成功" + newpath);
+  // });
+  //成功预览
+  // res.send(`<h1>上传成功</h1><img src="./upload/${req.file.originalname}"/>`);
+  setTimeout(()=>{},2000)
   response.send("upload file to server");
 });
 

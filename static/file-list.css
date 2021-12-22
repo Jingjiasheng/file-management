@@ -16,14 +16,28 @@
 .file-list .file-list-input-wrapper input {
     background-color: rgb(41, 45, 62);
     border: 0;
-    width: 100%;
     text-align: center;
     font-size: 15px;
     color: rgb(255, 255, 255);
     outline: none;
     font-weight:Bold; 
+    overflow:hidden; 
+    white-space:nowrap; 
+    text-overflow:ellipsis;
+    margin-left: 3px;
 }
 
+.file-list .file-list-input-wrapper label {
+    border: 0;
+    text-align: center;
+    font-size: 13px;
+    color: rgb(255, 255, 255);
+    outline: none;
+    font-weight:Bold; 
+    overflow:hidden; 
+    white-space:nowrap; 
+    text-overflow:ellipsis;
+}
 
 .file-list .file-list-input-wrapper input:hover {
     background-color: rgb(255, 255, 255);
@@ -33,6 +47,7 @@
     font-size: 15px;
     color: rgb(0, 0, 0);
     outline: none;
+    transition:  1s;
 }
 
 
@@ -51,6 +66,10 @@
     height: calc(100% - 4px);
     width: calc(100% - 4px);
     border-radius: 20px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
 }
 
 .file-list .action {
@@ -77,4 +96,5 @@
 .file-list .action .btn:hover {
     color: black;
     background-image: linear-gradient(120deg, #ff0000 0%, #ffffff 100%);
+    transition:  1s;
 }

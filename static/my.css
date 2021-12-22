@@ -42,6 +42,9 @@ body {
     font-size: 15px;
     color: #fff;
     outline: none;
+    overflow:hidden;
+    white-space:nowrap; 
+    text-overflow:ellipsis;
 }
 
 .form-wrapper .input-wrapper input::placeholder {
@@ -68,6 +71,7 @@ body {
 
 .form-wrapper .input-wrapper .border-wrapper .border-item:hover {
     background-image: linear-gradient(to left, #e8198b, #0eb4dd);
+    transition:  1s;
 }
 
 .form-wrapper .action {
@@ -79,7 +83,7 @@ body {
     color: #fff;
     width: 48%;
     text-transform: uppercase;
-    border: 2px solid #0e92b3;
+    border: 2px solid #001aff;
     text-align: center;
     line-height: 40px;
     border-radius: 30px;
@@ -89,7 +93,8 @@ body {
 
 .form-wrapper .action .btn:hover {
     color: black;
-    background-image: linear-gradient(120deg, #84fab0 0%, #8fd3f4 100%);
+    background-image: linear-gradient(120deg, #0eb4dd 0%, #e8198b 100%);
+    transition:  1s;
 }
 
 .form-wrapper .icon-wrapper {

@@ -6,7 +6,7 @@ const select_files = new Map();
 
 // show upload/download file list on right
 showFileList = (type) => {
-    $("#file-list").removeAttr("hidden");
+    $("#file-list").show(500);
     switch(type){
         case "upload": 
             $(".file-list-header").text("Upload Files")
@@ -37,7 +37,7 @@ $("#cancel").on("click", function(){
 })
 
 cancelAction = () => {
-    $('#file-list').prop("hidden", "hidden");
+    $('#file-list').hide(500);
     enableButton();
     cleanFileList();
     $("#submit").text("Submit");
@@ -94,20 +94,18 @@ $('#upload').on('click', () => {
 
 const appendFileToList = (input_files) => {
     let item_html;
-    // console.log(input_files)
-    for (let i =0; i< input_files.length; i++){
+    for (let i = 0; i < input_files.length; i++){
         const file = input_files[i]
         // Add every file to upload file list
         upload_files.set(String(file.lastModified), file);
-        console.log(typeof file.lastModified);
         // append file to upload file list window
         appendFileToList(file)
         item_html = 
             "<div class='file-list-border-wrapper'>" + 
                 "<input type='button' "+
                     "id='" + file.lastModified + 
-                    "' value='"+ file.name + ":" + ((file.size) / (1024 * 1000)).toFixed(2) + "M [" + file.type + "]" +
-                    "' class='file-list-border-item'>" +
+                    "' value='"+ file.name +
+                    "' class='file-list-border-item'>&nbsp<label style='font-size: 13px; text-align: center;'>"+ ((file.size) / (1024 * 1000)).toFixed(2) +"M &nbsp</label>" +
             "</div>"
         $(".file-list-input-wrapper").append(item_html);
     }
@@ -134,8 +132,6 @@ $('.file-list-input-wrapper').on('click', ".file-list-border-item", (e) => {
     const chose_file_item = $(e.target)
     let file_id = $(e.target).attr( "id" );
     var css_value = "linear-gradient(to left, rgb(232, 25, 139), rgb(14, 180, 221))"
-    alert(chose_file_item.css("background-image") == css_value)
-    // is already selected
     if (chose_file_item.css("background-image") == css_value){
         chose_file_item.css("background-image","");
         select_files.delete(file_id);
@@ -143,7 +139,6 @@ $('.file-list-input-wrapper').on('click', ".file-list-border-item", (e) => {
         chose_file_item.css("background-image", css_value)
         select_files.set(file_id, file_id);
     }
-    console.log("selected file's ids: ", select_files);
 })
 
 // remove the items which was selected
@@ -164,21 +159,19 @@ $("#del").on("click", () => {
 // submit button will upload file(s) or download file(s)
 $('#submit').on('click', () => {
     switch($("#submit").text()){
-        case "Submit Upload":
-            alert("submit upload file");
+        case "Upload":
             // TODO: Should get right upload file list, and to upload to remote server 
-            console.log(upload_files);
             // should use for of to upload file to reshow loading progress bar
             uploadAllToServer(upload_files);
             // should close file list when all file are upload successfully
-            $('#file-list').prop("hidden", "hidden");
+            
             break; 
-        case "Submit Download":
+        case "Download":
             alert("Submit download file");
             // TODO: Should need get all file user selected file on right file list window
             // need use for of do those downloads to reshow download pregress bar
             // should close download file list when user down load all files he need
-            $('#file-list').prop("hidden", "hidden");
+            $('#file-list').hide(500);
             break;
         default: 
             alert("Please Click Upload Or Download Button And Select File(s) First!")
@@ -192,19 +185,39 @@ $("#cancel").on("click", () => {
 
 const uploadAllToServer = (files) => {
     for (let file of files){
-        var files = $('#upload-file').prop('files');
         var data = new FormData();
-        data.append('file001', files[0]);
+        data.append('file', file);
         $.ajax({
             type: 'POST',
-            url: "http://192.168.10.21:4040/file",
+            url: "http://192.168.10.21:4040/files",
             data: data,
             cache: false,
             processData: false,
             contentType: false,
-            success: function (ret) {
-                alert(ret);
+            xhr: () => {
+                var xhr = $.ajaxSettings.xhr();
+                if (onProgress && xhr.upload) {
+                    xhr.upload.addEventListener("progress", onProgress, false);
+                    return xhr;
+                }
+            },
+            success: (ret) => {
+                console.log(ret);
             }
         });
     }
+    $('#file-list').hide(3000);
+}
+
+onProgress = (event) => {
+    console.log(event);
+    //已经上传大小情况
+    var loaded = event.loaded;     
+    // 附件总大小 
+    var tot = event.total;
+    var per = Math.floor(100 * loaded / tot);  //已经上传的百分比 
+    $("#1633942839269").css({ "width": per + "%", "transition":"1s"})
+    console.log(loaded);
+    console.log(tot);
+    console.log(per);
 }
