@@ -1,0 +1,27 @@
+# Ignore all hidden files and folders
+.*
+
+# Ignore all code in node modules
+node_modules
+
+# Ignore logs
+logs
+
+# Ignore outputs
+outputs
+
+# Ignore all code in the build directory
+build
+dist
+
+# Ignore public folder
+public
+
+# Ignore views
+src/views
+
+# Ignore configs
+config
+
+# Ignore transpiled code for debugging
+debug
