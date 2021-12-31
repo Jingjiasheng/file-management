@@ -1,8 +1,9 @@
 {
-  "name": "file-manager",
+  "name": "@jingjiasheng/file-management",
   "version": "1.0.0",
   "description": "this package is a simple file share web app",
   "main": "file-index.js",
+  "repository": {"url": "git@github.com:Jingjiasheng/file-management.git"},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node src/index.ts"
@@ -31,5 +32,10 @@
     "ejs": "^3.1.6",
     "express": "^4.17.2",
     "typescript": "^4.3.4"
+  },
+  "publishConfig": {
+    "type":"git",
+    "registry":"https://npm.pkg.github.com/Jingjiasheng/"
   }
 }
+
