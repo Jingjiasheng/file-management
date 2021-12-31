@@ -4,9 +4,12 @@ import path from "path";
 import express from "express";
 import multer from "multer";
 import morgan from "morgan";
+import mime from "mime";
 
 import { config } from "./config";
-import { getLocalIp } from "./utils/get_ip";
+import { getLocalIp } from "./utils/get_server_ip";
+import { reqLimitCheck } from "./utils/req_limit_check";
+import { FILE } from "./utils/file_mgmt";
 
 
 const app = express();
@@ -17,31 +20,61 @@ const upload = multer({ dest: "./root" });
 const file_root = config.file_root_path;
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
-// get file list
-app.get("/files", (_request, response) => {
-  const files: string[] = [];
-  for (const file of fs.readdirSync(file_root)) { 
-    files.push(file);
-    console.log(file); 
+
+
+app.use(express.static("static"));
+app.set("view engine", "ejs");
+
+// reader index page 
+app.get("/", (_request, response) => response.render("index"));
+
+
+app.use("/files", (req, res, next) => {
+  if (!reqLimitCheck(req.ip)){
+    return res.status(403).json({code: 403100, message: "Request too fast, do not attack or try again later!"})
   }
-  response.send({ file_list: files });
+  next();
+})
+
+
+
+// get file list
+app.get("/files", (req, res) => {
+  const user_dri = FILE.genUserDir(req.body.auth_code);
+  // create user file dir if not exist
+  fs.existsSync(user_dri) ?? fs.mkdirSync(user_dri);
+
+  let files_infos: any[] = []
+  fs.readdirSync(user_dri).forEach(file_name => {
+     files_infos.push({
+       ...(fs.statSync(user_dri+ file_name)),
+       file_name: file_name,
+       file_path: user_dri+file_name,
+       mime_type: mime.getType(user_dri+file_name)
+     })
+  })
+  files_infos = files_infos.slice(0,5)
+  console.log(files_infos)
+  res.send({ file_list: files_infos });
 });
 
 
-// get file list
-app.get("/download/:file_name", (request, response) => {
-  const { file_name } = request.params;
-  const file_path = path.join(file_root, file_name);    
+// download one file
+app.get("/files/download/:file_name", (req, res) => {
+  const { file_name } = req.params;
+  const user_dri = FILE.genUserDir(req.body.auth_code)
+
+  const file_path = user_dri + file_name;   
   if (fs.statSync(file_path).isFile()){
-    response.download(file_path);
-  } 
+    res.download(file_path);
+  }
   else {
-    response.end("Sorry, file is not exist!");
+    res.end("Sorry, file is not exist!");
   }
 });
 
 //upload single file to server
-app.post("/files", upload.single("file"), (request,  response) => {
+app.post("/files/upload", upload.single("file"), (request,  response) => {
   // const oldpath = request.file.destination + "/" + request.file.filename;
   // const newpath = request.file.destination + "/" + request.file.originalname;
   // fs.rename(oldpath,newpath,() => {
@@ -52,12 +85,6 @@ app.post("/files", upload.single("file"), (request,  response) => {
   setTimeout(()=>{},2000)
   response.send("upload file to server");
 });
-
-app.use(express.static("static"));
-app.set("view engine", "ejs");
-//upload single file to server
-app.get("/", (_request, response) => response.render("index"));
-
 
 // start server and bind port
 app.listen(config.server_port);
