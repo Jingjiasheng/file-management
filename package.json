@@ -4,7 +4,8 @@
   "description": "this package is a simple file share web app",
   "main": "file-index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node src/index.ts"
   },
   "author": "j_jiasheng@qq.com",
   "license": "ISC",
@@ -15,6 +16,7 @@
     "eslint": "^8.5.0",
     "express": "^4.17.2",
     "fs": "^0.0.1-security",
+    "mime": "^3.0.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.4",
     "path": "^0.12.7",
@@ -23,6 +25,8 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
+    "@types/morgan": "^1.9.3",
+    "@types/multer": "^1.4.7",
     "@types/node": "^17.0.2",
     "ejs": "^3.1.6",
     "express": "^4.17.2",

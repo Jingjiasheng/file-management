@@ -189,7 +189,7 @@ const uploadAllToServer = (files) => {
         data.append('file', file);
         $.ajax({
             type: 'POST',
-            url: "http://192.168.10.21:4040/files",
+            url: "http://192.168.10.21:4040/files/upload",
             data: data,
             cache: false,
             processData: false,
