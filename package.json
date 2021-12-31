@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "description": "this package is a simple file share web app",
   "main": "file-index.js",
-  "repository": {"url": "git@github.com:Jingjiasheng/file-management.git"},
+  "repository": {
+    "url": "git@github.com:Jingjiasheng/file-management.git"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node ./src/index.ts"
   },
   "author": "j_jiasheng@qq.com",
   "license": "ISC",
@@ -24,14 +27,15 @@
   },
   "devDependencies": {
     "@types/express": "^4.17.13",
+    "@types/morgan": "^1.9.3",
+    "@types/multer": "^1.4.7",
     "@types/node": "^17.0.2",
     "ejs": "^3.1.6",
     "express": "^4.17.2",
     "typescript": "^4.3.4"
   },
   "publishConfig": {
-    "type":"git",
-    "registry":"https://npm.pkg.github.com/Jingjiasheng/"
+    "type": "git",
+    "registry": "https://npm.pkg.github.com/Jingjiasheng/"
   }
 }
-
