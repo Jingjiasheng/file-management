@@ -1,20 +1,19 @@
-import fs from "fs";
-import path from "path";
-
+import bodyParser from "body-parser";
 import express from "express";
-import multer from "multer";
-import morgan from "morgan";
+import fs from "fs";
 import mime from "mime";
-
+import morgan from "morgan";
+import multer from "multer";
 import { config } from "./config";
+import { FILE } from "./utils/file_mgmt";
 import { getLocalIp } from "./utils/get_server_ip";
 import { reqLimitCheck } from "./utils/req_limit_check";
-import { FILE } from "./utils/file_mgmt";
 
 
 const app = express();
 const upload = multer({ dest: "./root" });
-
+const jsonParser = bodyParser.json({ type: 'application/*+json' });
+const urlParser = bodyParser.urlencoded();
 
 // base file root dir
 const file_root = config.file_root_path;
@@ -30,65 +29,106 @@ app.get("/", (_request, response) => response.render("index"));
 
 
 app.use("/files", (req, res, next) => {
-  if (!reqLimitCheck(req.ip)){
-    return res.status(403).json({code: 403100, message: "Request too fast, do not attack or try again later!"})
+  try {
+    if (!reqLimitCheck(req.ip)) {
+      return res.status(403).json({ code: 403100, message: "Request too fast, do not attack or try again later!" })
+    }
+    if (!req.headers.auth_code) {
+      return res.status(400).json({ code: 400100, message: "You did not set your auth_code, please refresh page!" })
+    }
+    const user_dri = FILE.genUserDir(req.headers.auth_code as string);
+    // create file dir for new user if not exist
+    if (!fs.existsSync(user_dri)) {
+      fs.mkdirSync(user_dri);
+    }
+    next();
+  } catch (error) {
+    return res.status(500).json({ code: 500100, message: "Something was wrong in user dir check or The server was attacked!" })
   }
-  next();
 })
 
 
 
 // get file list
-app.get("/files", (req, res) => {
-  const user_dri = FILE.genUserDir(req.body.auth_code);
-  // create user file dir if not exist
-  fs.existsSync(user_dri) ?? fs.mkdirSync(user_dri);
-
-  let files_infos: any[] = []
-  fs.readdirSync(user_dri).forEach(file_name => {
-     files_infos.push({
-       ...(fs.statSync(user_dri+ file_name)),
-       file_name: file_name,
-       file_path: user_dri+file_name,
-       mime_type: mime.getType(user_dri+file_name)
-     })
-  })
-  files_infos = files_infos.slice(0,5)
-  console.log(files_infos)
-  res.send({ file_list: files_infos });
+app.post("/files/get_list", urlParser, (req, res) => {
+  try {
+    const user_dri = FILE.genUserDir(req.headers.auth_code as string);
+    let files_infos: any[] = []
+    fs.readdirSync(user_dri).forEach(file_name => {
+      files_infos.push({
+        ...(fs.statSync(user_dri + file_name)),
+        file_name: file_name,
+        file_path: user_dri + file_name,
+        mime_type: mime.getType(user_dri + file_name)
+      })
+    })
+    files_infos = files_infos.slice(0, 5)
+    res.send({ file_list: files_infos });
+  } catch (error) {
+    return res.status(500).json({ code: 500100, message: "Something was wrong in user try to get files from server!" })
+  }
 });
 
 
 // download one file
-app.get("/files/download/:file_name", (req, res) => {
-  const { file_name } = req.params;
-  const user_dri = FILE.genUserDir(req.body.auth_code)
-
-  const file_path = user_dri + file_name;   
-  if (fs.statSync(file_path).isFile()){
-    res.download(file_path);
-  }
-  else {
-    res.end("Sorry, file is not exist!");
+app.post("/files/download", urlParser, (req, res) => {
+  try {
+    const { file_name } = req.body;
+    const user_dir = FILE.genUserDir(req.headers.auth_code as string)
+    const file_path = user_dir + file_name;
+    if (fs.existsSync(file_path) && fs.statSync(file_path).isFile()) {
+      res.download(file_path);
+    }
+    else {
+      return res.status(400).json({ code: 400100, message: "Sorry, file is not exist!" });
+    }
+  } catch (error) {
+    return res.status(500).json({ code: 500100, message: "Something was wrong in user try to download file!" })
   }
 });
 
+
+// delete files
+app.post("/files/delete", urlParser, (req, res) => {
+  try {
+    const { file_names } = req.body;
+    const user_dir = FILE.genUserDir(req.headers.auth_code as string)
+    file_names.map(file_name => {
+      const file_path = user_dir + file_name;
+      if (!(fs.existsSync(file_path) && fs.statSync(file_path).isFile())) {
+        return res.status(400).json({ code: 400100, message: "Sorry, file is not exist!" });
+      }
+      fs.unlinkSync(file_path);
+    });
+    return res.status(200).json({ code: 200100, message: "File deletion complete!" })
+  } catch (error) {
+    return res.status(500).json({ code: 500100, message: "Something was wrong in user try to delete files!" })
+  }
+});
+
+
 //upload single file to server
-app.post("/files/upload", upload.single("file"), (request,  response) => {
-  // const oldpath = request.file.destination + "/" + request.file.filename;
-  // const newpath = request.file.destination + "/" + request.file.originalname;
-  // fs.rename(oldpath,newpath,() => {
-  //   console.log("重命名成功" + newpath);
-  // });
-  //成功预览
-  // res.send(`<h1>上传成功</h1><img src="./upload/${req.file.originalname}"/>`);
-  setTimeout(()=>{},2000)
-  response.send("upload file to server");
+app.post("/files/upload", upload.single("file"), (req, res) => {
+  try {
+    if (req.file === undefined) {
+      return res.status(403).json({ code: 403100, message: "Cannot upload empty file!" });
+    }
+    const oldpath = req.file.destination + "/" + req.file.filename;
+    const newpath = FILE.genUserDir(req.headers.auth_code as string) + req.file.originalname;
+    fs.rename(oldpath, newpath, (error) => {
+      if (error) {
+        return res.status(500).json({ code: 500100, message: "Upload File To Server Error!", error: error.message })
+      }
+      return res.status(200).json({ code: 200100, message: "Upload File To Server Successfully!" })
+    });
+  } catch (error) {
+    return res.status(500).json({ code: 500100, message: "Something was wrong in user try to upload file to server!" })
+  }
 });
 
 // start server and bind port
 app.listen(config.server_port);
-if (process.env.NODE_ENV != "prod"){
+if (process.env.NODE_ENV != "prod") {
   console.log(`Server Start In http://${getLocalIp()}:${config.server_port}`);
 }
 else {

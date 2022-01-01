@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
- 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="ali.css">
     <link rel="stylesheet" type="text/css" href="my.css">
     <link rel="stylesheet" type="text/css" href="file-list.css">
+    <link rel="stylesheet" type="text/css" href="animate.css">
+    <link rel="stylesheet" type="text/css" href="normalize.css">
+    <link rel="stylesheet" type="text/css" href="pop.css">
     <title>Document</title>
 </head>
- 
-<body>
+
+<body style="overflow-x: hidden; overflow-y: hidden;">
 
     <!-- The part of Upload file -->
     <div class="form-wrapper">
@@ -19,11 +22,14 @@
         </div>
         <div class="input-wrapper">
             <div class="border-wrapper">
-                <input type="button" name="username" id="upload" value="Upload File" class="border-item" autocomplete="off">
-                <input type="file" name="username" id="upload-file" value="Upload File" class="border-item" autocomplete="off" multiple="multiple" hidden>
+                <input type="button" name="username" id="upload" value="Upload File" class="border-item"
+                    autocomplete="off">
+                <input type="file" name="username" id="upload-file" value="Upload File" class="border-item"
+                    autocomplete="off" multiple="multiple" hidden>
             </div>
             <div class="border-wrapper">
-                <input type="button" name="password" id="download" value="Download File" class="border-item" autocomplete="off">
+                <input type="button" name="password" id="download" value="Download File" class="border-item"
+                    autocomplete="off">
             </div>
         </div>
         <div class="action">
@@ -38,23 +44,7 @@
         <div class="file-list-header">
             Recent File
         </div>
-        <div class="file-list-input-wrapper">
-            <!-- <div class="file-list-border-wrapper">
-                <input type="button" name="username" id="download001" value="report.doc" class="file-list-border-item" autocomplete="off">
-            </div>
-            <div class="file-list-border-wrapper">
-                <input type="button" name="password" id="download" value="background.jpeg" class="file-list-border-item" autocomplete="off">
-            </div>
-            <div class="file-list-border-wrapper">
-                <input type="button" name="password" id="download" value="XiaoZeYouMuFeng.avi" class="file-list-border-item" autocomplete="off">
-            </div>
-            <div class="file-list-border-wrapper">
-                <input type="button" name="password" id="download" value="mysql.conf" class="file-list-border-item" autocomplete="off">
-            </div>
-            <div class="file-list-border-wrapper">
-                <input type="button" name="password" id="download" value="nginx.old.conf" class="file-list-border-item" autocomplete="off">
-            </div> -->
-        </div>
+        <div class="file-list-input-wrapper"> </div>
         <div class="action">
             <button class="btn" id="del"> remove </button>
         </div>
@@ -62,9 +52,32 @@
     </div>
 
 </body>
+
+<div id="item" class="item">
+    <h3>使用提示：</h3>
+    <h4>本网站的开发目标是方便用户跨设备传输文件，所以它有以下特点或者说注意事项！</h4>
+    <p>1. 网站根据用户第一次输入授权码进行文件的上传查看以及下载操作，所以越简单的授权码越容易和别人“相同”，从而被别人闯入或者闯入别人的文件夹当中</p>
+    <p>2. 因为服务器的磁盘有限，所以采取策略: 单授权码只能上传5个文件并保存30天(过期自动清除且无法找回)，单文件大小限制在5G</p>
+    <p>3. 本网站只做临时中转作用，上传的文件不具任何保密性，请勿上传重要文件，出现损失本站不担任何锅，祝：使用愉快！</p>
+    <!-- <img src="img/qrcode_430.jpg"> -->
+    <br><br>
+    <div class="wrapper">
+        <div class="input-data">
+            <input type="text" required="" style="border: none; font-size: 25px; font-weight: bold;"/>
+            <div class="underline"></div>
+            <label>   Input your auth code</label>
+        </div>
+    </div>
+    <br>
+    <button id="submit_auth_code" style="width: 100%; border: none; background-color: rgb(255, 149, 255); color: #eee; border-radius: 5px; height: 40px; filter: blur(0);">SUBMIT</button>
+    <!-- <div class="item-close js-popup-close" id="item-close">Submit</div> -->
+</div>
+
 </html>
 
 <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.js"></script>
+<script src="http://www.gongjuji.net/Content/files/jquery.md5.js"></script>
+<script src="jquery.popup.js"></script>
 
-
-<script src="index.js" ></script>
+<script src="index.js"></script>
+<script src="pop.js"></script>

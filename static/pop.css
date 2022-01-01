@@ -1,0 +1,113 @@
+.item {
+    max-width: 65%;
+    padding: 1em;
+    background: url('dd.jpg') no-repeat 100% 100%;
+    display: none;
+    position: relative;
+    -webkit-box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.15);
+    border-radius: 5px;
+    color: #000;
+}
+
+.item::before{
+    content: '';
+    position: absolute;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    filter: blur(10px);
+    margin:-21px;
+    background: url('dd.jpg') no-repeat 100% 100%;
+    background-size: cover;
+    opacity: .8;
+    -webkit-filter: blur(10px);
+}
+.item p, h3, h4{
+    filter: blur(0);
+}
+
+
+/* #submit_auth_code:hover{
+    background: #1100ff;
+    opacity: 0.5; 
+} */
+
+#submit_auth_code:active{
+    width: 80%;
+    height: 40px;
+    color: white;
+    border-radius: 5px;
+    background: #4a9bfa;
+    opacity: 0.5; 
+    filter: blur(0);
+}
+/* ---------------input--------- */
+.wrapper{
+        width: 100%;
+        background-color: rgb(255, 255, 255);
+        /* padding: 20px ; */
+        box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        filter: blur(0);
+        border-radius: 5px;
+    }
+    .wrapper .input-data{
+        width: 100%;
+        height: 50px;
+        position: relative;
+        border-radius: 5px;
+        filter: blur(0);
+    }
+    .wrapper .input-data input{
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 5px;
+        border-bottom: 2px solid silver;
+        font-size: 17px;
+        text-align: center;
+        filter: blur(0);
+        backdrop-filter: blur(10px) brightness(110%);
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        -ms-border-radius: 5px;
+        -o-border-radius: 5px;
+}
+    .input-data input:focus ~ label,
+    .input-data input:valid ~ label{
+        transform: translateY(-50px);
+        font-size: 20px;
+        color: #4158D0;
+    }
+    .wrapper .input-data label{
+        margin-left: 10px;
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        color: grey;
+        pointer-events: none;
+        transition: all 0.3s ease;
+    }
+    .wrapper .input-data .underline{
+        position: absolute;
+        bottom: 0px;
+        height: 2px;
+        width: 100%;
+        filter: blur(0);
+    }
+    .input-data .underline:before{
+        position: absolute;
+        content: "";
+        height: 100%;
+        width: 100%;
+        background: #4158D0;
+        transform: scaleX(0);
+        transition:transform 0.3s ease;
+    }
+    
+    .input-data input:focus ~ .underline:before,
+    .input-data input:valid ~ .underline:before{
+        transform: scaleX(1);
+    }

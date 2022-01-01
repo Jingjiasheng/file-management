@@ -7,4 +7,17 @@
     "sourceMaps": true,
     "cwd": "${workspaceRoot}",
     "protocol": "inspector",
+    "configurations": [
+        {
+            "name": "Launch via NPM",
+            "request": "launch",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run",
+                "start"
+            ],
+            "type": "pwa-node"
+        }
+    
+    ],
 }

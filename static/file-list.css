@@ -59,12 +59,12 @@
     border-radius: 20px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: left;
 }
 
 .file-list .file-list-input-wrapper .file-list-border-wrapper .file-list-border-item {
     height: calc(100% - 4px);
-    width: calc(100% - 4px);
+    width: calc(70% - 4px);
     border-radius: 20px;
     -webkit-border-radius: 20px;
     -moz-border-radius: 20px;
