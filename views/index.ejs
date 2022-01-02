@@ -53,25 +53,34 @@
 
 </body>
 
-<div id="item" class="item">
-    <h3>使用提示：</h3>
-    <h4>本网站的开发目标是方便用户跨设备传输文件，所以它有以下特点或者说注意事项！</h4>
-    <p>1. 网站根据用户第一次输入授权码进行文件的上传查看以及下载操作，所以越简单的授权码越容易和别人“相同”，从而被别人闯入或者闯入别人的文件夹当中</p>
-    <p>2. 因为服务器的磁盘有限，所以采取策略: 单授权码只能上传5个文件并保存30天(过期自动清除且无法找回)，单文件大小限制在5G</p>
-    <p>3. 本网站只做临时中转作用，上传的文件不具任何保密性，请勿上传重要文件，出现损失本站不担任何锅，祝：使用愉快！</p>
-    <!-- <img src="img/qrcode_430.jpg"> -->
-    <br><br>
-    <div class="wrapper">
-        <div class="input-data">
-            <input type="text" required="" style="border: none; font-size: 25px; font-weight: bold;"/>
-            <div class="underline"></div>
-            <label>   Input your auth code</label>
+
+
+<!-- 遮罩层 -->
+<div class="modal" id="modal" hidden>
+    <div class="container">
+        <div id="pop" class="pop">
+            <h3>使用提示：</h3>
+            <h4>本网站的开发目标是方便用户跨设备传输文件，所以它有以下特点或者说注意事项！</h4>
+            <p>1. 网站根据用户第一次输入授权码进行文件的上传查看以及下载操作，所以越简单的授权码越容易和别人“相同”，从而被别人闯入或者闯入别人的文件夹当中</p>
+            <p>2. 因为服务器的磁盘有限，所以采取策略: 单授权码只能上传5个文件并保存30天(过期自动清除且无法找回)，单文件大小限制在5G</p>
+            <p>3. 本网站只做临时中转作用，上传的文件不具任何保密性，请勿上传重要文件，出现损失本站不担任何锅，祝：使用愉快！</p>
+            <!-- <img src="img/qrcode_430.jpg"> -->
+            <br><br>
+            <div class="wrapper">
+                <div class="input-data">
+                    <input type="text" id="auth_code" required="" style="border: none; font-size: 25px; font-weight: bold;"/>
+                    <div class="underline"></div>
+                    <label>   Input your auth code</label>
+                </div>
+            </div>
+            <br>
+            <button id="submit_auth_code" >SUBMIT</button>
+            <!-- <div class="item-close js-popup-close" id="item-close">Submit</div> -->
         </div>
     </div>
-    <br>
-    <button id="submit_auth_code" style="width: 100%; border: none; background-color: rgb(255, 149, 255); color: #eee; border-radius: 5px; height: 40px; filter: blur(0);">SUBMIT</button>
-    <!-- <div class="item-close js-popup-close" id="item-close">Submit</div> -->
 </div>
+
+
 
 </html>
 

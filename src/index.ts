@@ -59,7 +59,7 @@ app.post("/files/get_list", urlParser, (req, res) => {
         ...(fs.statSync(user_dri + file_name)),
         file_name: file_name,
         file_path: user_dri + file_name,
-        mime_type: mime.getType(user_dri + file_name)
+        mime_type: mime.lookup(user_dri + file_name)
       })
     })
     files_infos = files_infos.slice(0, 5)
@@ -95,9 +95,9 @@ app.post("/files/delete", urlParser, (req, res) => {
     const user_dir = FILE.genUserDir(req.headers.auth_code as string)
     file_names.map(file_name => {
       const file_path = user_dir + file_name;
-      if (!(fs.existsSync(file_path) && fs.statSync(file_path).isFile())) {
-        return res.status(400).json({ code: 400100, message: "Sorry, file is not exist!" });
-      }
+      // if (!(fs.existsSync(file_path) && fs.statSync(file_path).isFile())) {
+      //   return res.status(400).json({ code: 400100, message: "Sorry, file is not exist!" });
+      // }
       fs.unlinkSync(file_path);
     });
     return res.status(200).json({ code: 200100, message: "File deletion complete!" })

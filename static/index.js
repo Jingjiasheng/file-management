@@ -6,7 +6,6 @@ const select_files = new Map();
 
 // show upload/download file list on right
 showFileList = (type) => {
-    $(".file-list-input-wrapper").empty();
     $("#file-list").show(500);
     switch(type){
         case "upload": 
@@ -16,6 +15,7 @@ showFileList = (type) => {
             break;
 
         case "download":{
+            $(".file-list-input-wrapper").empty();
             $(".file-list-header").text("Download Files");
             // disableButton("upload");
             // init the data from http response
@@ -100,7 +100,9 @@ const appendFileToList = (input_files) => {
     for (let i = 0; i < input_files.length; i++){
         const file = input_files[i]
         // Add every file to upload file list
-        upload_files.set($.md5(file.name), file);
+        if ($(".file-list-header").text() == "Upload Files"){
+            upload_files.set($.md5(file.name), file);
+        } 
         // append file to upload file list window
         appendFileToList(file)
         item_html = 
@@ -129,7 +131,7 @@ $('#download').on('click', () => {
         type: 'POST',
         url: "http://localhost:4040/files/get_list",
         dataType: "json",
-        headers:{"auth_code":"jjk"},
+        headers:{"auth_code":localStorage.getItem("auth_code")},
         success: (res) => {
             console.log(res);
             appendFileToList(res.file_list.map(file => ({
@@ -183,10 +185,14 @@ $("#del").on("click", () => {
                 url: "http://localhost:4040/files/delete",
                 dataType: "json",
                 data: {"file_names": file_names},
-                headers:{"auth_code":"jjk"},
+                headers:{"auth_code":localStorage.getItem("auth_code")},
                 success: (ret) => {
                     for (file_id of select_files.keys()){
+                        // 从界面表单中移除
                         $("#" + file_id).parent().remove();
+                        // 从选中的文件列表当中移除
+                        select_files.delete(file_id);
+                        $("#download").trigger('click');
                     }
                     console.log(ret);
                 }
@@ -210,9 +216,9 @@ $('#submit').on('click', () => {
             break; 
         case "Download":
             // TODO: Should need get all file user selected file on right file list window
-            console.log(select_files);
+            console.log(download_files = select_files);
             // need use for of do those downloads to reshow download pregress bar
-            downloadAllToServer(select_files);
+            downloadAllToServer(download_files);
             // should close download file list when user down load all files he need
             // $('#file-list').hide(500);
             break;
@@ -238,7 +244,7 @@ const uploadAllToServer = (files) => {
             cache: false,
             processData: false,
             contentType: false,
-            headers:{"auth_code":"jjk"},
+            headers:{"auth_code":localStorage.getItem("auth_code")},
             xhr: () => {
                 let xhr = $.ajaxSettings.xhr();
                 if (xhr.upload) {
@@ -272,7 +278,7 @@ const downloadAllToServer = (files) => {
             url: "http://localhost:4040/files/download",
             dataType: "json",
             data: {"file_name": file_name},
-            headers:{"auth_code":"jjk"},
+            headers:{"auth_code": localStorage.getItem("auth_code")},
             success: (ret) => {
                 $("#" + $.md5(file_name)).val(file_name + " √");
                 console.log(ret);

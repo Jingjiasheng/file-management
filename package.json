@@ -1,6 +1,6 @@
 {
   "name": "@jingjiasheng/file-management",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "this package is a simple file share web app",
   "main": "file-index.js",
   "repository": {
@@ -20,7 +20,7 @@
     "eslint": "^8.5.0",
     "express": "^4.17.2",
     "fs": "^0.0.1-security",
-    "mime": "^3.0.0",
+    "mime-type": "^4.0.0",
     "morgan": "^1.10.0",
     "multer": "^1.4.4",
     "path": "^0.12.7",
