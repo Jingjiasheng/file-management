@@ -70,9 +70,9 @@ app.post("/files/get_list", urlParser, (req, res) => {
 
 
 // download one file
-app.post("/files/download", urlParser, (req, res) => {
+app.get("/files/download", urlParser, (req, res) => {
   try {
-    const { file_name } = req.body;
+    const { file_name } = req.query;
     const user_dir = FILE.genUserDir(req.headers.auth_code as string)
     const file_path = user_dir + file_name;
     if (fs.existsSync(file_path) && fs.statSync(file_path).isFile()) {

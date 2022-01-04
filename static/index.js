@@ -272,20 +272,59 @@ const uploadAllToServer = (files) => {
 }
 
 const downloadAllToServer = (files) => {
-    for (let file_name of files.values()){   
-        $.ajax({
-            type: 'POST',
-            url: "./files/download",
-            dataType: "json",
-            data: {"file_name": file_name},
-            headers:{"auth_code": localStorage.getItem("auth_code")},
-            success: (ret) => {
-                $("#" + $.md5(file_name)).val(file_name + " √");
-                console.log(ret);
-                // 需要将下载完成的文件从选中的文件当中进行移除
-                files.delete($.md5(file_name))
-                // 还需要对选中的文件进行恢复未选中的状态
-            }
-        });
+    for (let file_name of files.values()) {   
+        downLoadByUrl("./files/download/", file_name);
+        // $.ajax({
+        //     type: 'POST',
+        //     url: "./files/download",
+        //     dataType: "json",
+        //     data: {"file_name": file_name},
+        //     headers:{"auth_code": localStorage.getItem("auth_code")},
+        //     success: (ret) => {
+        //         $("#" + $.md5(file_name)).val(file_name + " √");
+        //         console.log(ret);
+        //         // 需要将下载完成的文件从选中的文件当中进行移除
+        //         files.delete($.md5(file_name))
+        //         // 还需要对选中的文件进行恢复未选中的状态
+        //     }
+        // });
     }
 }
+
+function downLoadByUrl(url, file_name){
+    var xhr = new XMLHttpRequest();
+    //设置请求头参数的方式,如果没有可忽略此行代码
+    xhr.setRequestHeader("auth_code", localStorage.getItem("auth_code"));
+    //GET请求,请求路径url,async(是否异步)
+    xhr.open('GET', url+ "?file_name=" + file_name, true);
+    //设置响应类型为 blob
+    xhr.responseType = 'blob';
+    //关键部分
+    xhr.onload = function (e) {
+        //如果请求执行成功
+        if (this.status == 200) {
+
+            $("#" + $.md5(file_name)).val(file_name + " √");
+            // 需要将下载完成的文件从选中的文件当中进行移除
+            files.delete($.md5(file_name))
+            // 还需要对选中的文件进行恢复未选中的状态
+
+            var blob = this.response;
+            var filename = file_name;//如123.xls
+            var a = document.createElement('a');
+
+            blob.type = "application/octet-stream";
+            //创键临时url对象
+            var url = URL.createObjectURL(blob);
+
+            a.href = url;
+            a.download=filename;
+            a.click();
+            //释放之前创建的URL对象
+            window.URL.revokeObjectURL(url);
+        }
+    };
+    //发送请求
+    xhr.send();
+}
+
