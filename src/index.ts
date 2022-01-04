@@ -15,7 +15,7 @@ const upload = multer({ dest: FILE.TEMP_DIR });
 const jsonParser = bodyParser.json({ type: 'application/*+json' });
 const urlParser = bodyParser.urlencoded();
 
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
+app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'));
 
 
 app.use(express.static("static"));
@@ -61,7 +61,7 @@ app.post("/files/get_list", urlParser, (req, res) => {
       })
     })
     files_infos = files_infos.slice(0, 5)
-    res.send({ file_list: files_infos });
+    return res.status(200).json({code: 200100, data:{ file_list: files_infos }, message: "Get user file list successfully!"});
   } catch (error) {
     console.error(error);
     return res.status(500).json({ code: 500100, message: "Something was wrong in user try to get files from server!" })
