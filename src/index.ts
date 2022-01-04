@@ -4,19 +4,16 @@ import fs from "fs";
 import mime from "mime";
 import morgan from "morgan";
 import multer from "multer";
-import { config } from "./config";
 import { FILE } from "./utils/file_mgmt";
 import { getLocalIp } from "./utils/get_server_ip";
 import { reqLimitCheck } from "./utils/req_limit_check";
 
 
 const app = express();
-const upload = multer({ dest: "./root" });
+// const upload = multer({ dest: FILE.ROOT_DIR });
+const upload = multer({ dest: FILE.TEMP_DIR });
 const jsonParser = bodyParser.json({ type: 'application/*+json' });
 const urlParser = bodyParser.urlencoded();
-
-// base file root dir
-const file_root = config.file_root_path;
 
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
 
@@ -43,6 +40,7 @@ app.use("/files", (req, res, next) => {
     }
     next();
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ code: 500100, message: "Something was wrong in user dir check or The server was attacked!" })
   }
 })
@@ -65,6 +63,7 @@ app.post("/files/get_list", urlParser, (req, res) => {
     files_infos = files_infos.slice(0, 5)
     res.send({ file_list: files_infos });
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ code: 500100, message: "Something was wrong in user try to get files from server!" })
   }
 });
@@ -83,6 +82,7 @@ app.post("/files/download", urlParser, (req, res) => {
       return res.status(400).json({ code: 400100, message: "Sorry, file is not exist!" });
     }
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ code: 500100, message: "Something was wrong in user try to download file!" })
   }
 });
@@ -102,6 +102,7 @@ app.post("/files/delete", urlParser, (req, res) => {
     });
     return res.status(200).json({ code: 200100, message: "File deletion complete!" })
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ code: 500100, message: "Something was wrong in user try to delete files!" })
   }
 });
@@ -113,23 +114,21 @@ app.post("/files/upload", upload.single("file"), (req, res) => {
     if (req.file === undefined) {
       return res.status(403).json({ code: 403100, message: "Cannot upload empty file!" });
     }
-    const oldpath = req.file.destination + "/" + req.file.filename;
+    const oldpath = req.file.destination + req.file.filename;
     const newpath = FILE.genUserDir(req.headers.auth_code as string) + req.file.originalname;
-    fs.rename(oldpath, newpath, (error) => {
-      if (error) {
-        return res.status(500).json({ code: 500100, message: "Upload File To Server Error!", error: error.message })
-      }
-      return res.status(200).json({ code: 200100, message: "Upload File To Server Successfully!" })
-    });
+    fs.copyFileSync(oldpath, newpath);
+    fs.unlinkSync(oldpath);
+    return res.status(200).json({ code: 200100, message: "Upload File To Server Successfully!" })
   } catch (error) {
+    console.error(error);
     return res.status(500).json({ code: 500100, message: "Something was wrong in user try to upload file to server!" })
   }
 });
 
 // start server and bind port
-app.listen(config.server_port);
+app.listen(process.env.PORT ?? 4040);
 if (process.env.NODE_ENV != "prod") {
-  console.log(`Server Start In http://${getLocalIp()}:${config.server_port}`);
+  console.log(`Server Start In http://${getLocalIp()}:${process.env.PORT ?? 4040}`);
 }
 else {
   console.log("Server start success!");

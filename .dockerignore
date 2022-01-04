@@ -1,0 +1,51 @@
+
+node_modules
+
+# Ignore global configurations
+config
+
+# Ignore backups
+backups
+
+# Ignore build
+build
+dist
+
+# Ignore outputs
+outputs
+
+# Ignore logs
+logs
+*.log
+
+# Ignore secrets
+secrets
+
+# Ignore Readme
+readme_resources
+*.md
+
+# Ignore All API Docs
+api_doc
+
+# Ignore registration with op
+register_with_op
+
+# Ignore all hidden files
+.*
+
+# Ignore irrelevant static files
+*.json
+*.txt
+
+# Allow package.json files
+!package.json
+
+# Allow babel configuration files
+!babel.config.json
+
+# Allow typescript configuration files
+!tsconfig.json
+
+# Allow .npmrc configuration file to pull npm packages from private registry
+!.npmrc

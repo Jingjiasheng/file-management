@@ -1,7 +1,7 @@
 $(function () {
 
     
-    const auth_code = localStorage.getItem("suth_code");
+    const auth_code = localStorage.getItem("auth_code");
     
     if (!auth_code){
         $('#modal').show();
@@ -16,7 +16,7 @@ $(function () {
         }
         else{
             // 如果输入的值合法就存入网站数据
-            localStorage.setItem("suth_code", input_auth_code);
+            localStorage.setItem("auth_code", input_auth_code);
             $('#modal').hide();
         }
     })

@@ -129,7 +129,7 @@ $('#download').on('click', () => {
     // then need get file list from remote server
     $.ajax({
         type: 'POST',
-        url: "http://localhost:4040/files/get_list",
+        url: "./files/get_list",
         dataType: "json",
         headers:{"auth_code":localStorage.getItem("auth_code")},
         success: (res) => {
@@ -182,7 +182,7 @@ $("#del").on("click", () => {
             select_files.forEach((value, key) => { file_names.push(value) });
             $.ajax({
                 type: 'POST',
-                url: "http://localhost:4040/files/delete",
+                url: "./files/delete",
                 dataType: "json",
                 data: {"file_names": file_names},
                 headers:{"auth_code":localStorage.getItem("auth_code")},
@@ -216,7 +216,7 @@ $('#submit').on('click', () => {
             break; 
         case "Download":
             // TODO: Should need get all file user selected file on right file list window
-            console.log(download_files = select_files);
+            select_files.forEach((value, key) => {download_files.set(key, value)})
             // need use for of do those downloads to reshow download pregress bar
             downloadAllToServer(download_files);
             // should close download file list when user down load all files he need
@@ -239,7 +239,7 @@ const uploadAllToServer = (files) => {
         data.append("auth_code", "jjk");
         $.ajax({
             type: 'POST',
-            url: "http://localhost:4040/files/upload",
+            url: "./files/upload",
             data: data,
             cache: false,
             processData: false,
@@ -275,7 +275,7 @@ const downloadAllToServer = (files) => {
     for (let file_name of files.values()){   
         $.ajax({
             type: 'POST',
-            url: "http://localhost:4040/files/download",
+            url: "./files/download",
             dataType: "json",
             data: {"file_name": file_name},
             headers:{"auth_code": localStorage.getItem("auth_code")},
