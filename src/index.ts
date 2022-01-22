@@ -20,8 +20,7 @@ const urlParser = bodyParser.urlencoded();
 autoClearUserDir(FILE.CHECK_USER_DIR_CYCLE as number, FILE.CLEAR_USER_DIR_CYCLE as number)
 autoClearReqLimitCache(FILE.CLEAR_REQ_LIMIT_CACHE_CYCLE as number)
 
-app.use(morgan(':date[web] :method :url :status :res[content-length] - :response-time ms'))
-
+app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'));
 
 app.use(express.static("static"));
 app.set("view engine", "ejs");
@@ -65,7 +64,7 @@ app.post("/files/get_list", urlParser, (req, res) => {
       })
     })
     files_infos = files_infos.slice(0, 5)
-    res.send({ file_list: files_infos });
+    return res.status(200).json({code: 200100, data:{ file_list: files_infos }, message: "Get user file list successfully!"});
   } catch (error) {
     console.error(error);
     return res.status(500).json({ code: 500100, message: "Something was wrong in user try to get files from server!" })

@@ -7,14 +7,14 @@ const select_files = new Map();
 // show upload/download file list on right
 showFileList = (type) => {
     $("#file-list").show(500);
-    switch(type){
-        case "upload": 
+    switch (type) {
+        case "upload":
             $(".file-list-header").text("Upload Files");
             // disableButton("download");
             $("#submit").text("Upload");
             break;
 
-        case "download":{
+        case "download": {
             $(".file-list-input-wrapper").empty();
             $(".file-list-header").text("Download Files");
             // disableButton("upload");
@@ -35,7 +35,7 @@ cleanFileList = () => {
     $(".file-list-input-wrapper").empty();
 }
 
-$("#cancel").on("click", function(){
+$("#cancel").on("click", function () {
     cancelAction();
 })
 
@@ -47,33 +47,33 @@ cancelAction = () => {
 }
 
 disableButton = (type) => {
-    switch(type){
+    switch (type) {
         case "upload":
-            $('#upload').attr('disabled',true);
-            $('#upload').css('color',"rgb(0, 0, 0)");
+            $('#upload').attr('disabled', true);
+            $('#upload').css('color', "rgb(0, 0, 0)");
             break;
         case "download":
-            $('#download').attr('disabled',true);
-            $('#download').css('color',"rgb(0, 0, 0)");
+            $('#download').attr('disabled', true);
+            $('#download').css('color', "rgb(0, 0, 0)");
     }
 }
 
 
 enableButton = (type) => {
-    switch(type){
+    switch (type) {
         case "upload":
-            $('#upload').css('disabled',false);
-            $('#upload').css('color',"rgb(255, 255, 255)");
+            $('#upload').css('disabled', false);
+            $('#upload').css('color', "rgb(255, 255, 255)");
             break;
         case "download":
-            $('#upload').css('disabled',false);
-            $('#download').css('color',"rgb(255, 255, 255)");
+            $('#upload').css('disabled', false);
+            $('#download').css('color', "rgb(255, 255, 255)");
             break;
         default:
-            $('#upload').css('disabled',false);
-            $('#upload').css('color',"rgb(255, 255, 255)");
-            $('#upload').css('disabled',false);
-            $('#download').css('color',"rgb(255, 255, 255)");
+            $('#upload').css('disabled', false);
+            $('#upload').css('color', "rgb(255, 255, 255)");
+            $('#upload').css('disabled', false);
+            $('#download').css('color', "rgb(255, 255, 255)");
             break;
     }
 }
@@ -86,7 +86,7 @@ $('#upload').on('click', () => {
     // mock hidden file input click 
     $("#upload-file").trigger('click');
     // add file to right file list before every times user selected a new file 
-    $("#upload-file").change(function(e){
+    $("#upload-file").change(function (e) {
         showFileList("upload")
         appendFileToList(e.currentTarget.files)
         // clear all files after save to local let
@@ -97,29 +97,29 @@ $('#upload').on('click', () => {
 
 const appendFileToList = (input_files) => {
     let item_html;
-    for (let i = 0; i < input_files.length; i++){
+    for (let i = 0; i < input_files.length; i++) {
         const file = input_files[i]
         // Add every file to upload file list
-        if ($(".file-list-header").text() == "Upload Files"){
+        if ($(".file-list-header").text() == "Upload Files") {
             upload_files.set($.md5(file.name), file);
-        } 
+        }
         // append file to upload file list window
         appendFileToList(file)
-        item_html = 
-            "<div class='file-list-border-wrapper'>" + 
-                "<input type='button' "+
-                    "id='" + $.md5(file.name) + 
-                    "' value='"+ file.name +
-                    "' class='file-list-border-item'>"+
-                    "<label name="+ $.md5(file.name) +" style='font-size: 13px; text-align: center; margin-left: 5px'>"+ `${(file.size > 1000 * 1024) ? 
-                        ((file.size) / (1024 * 1000)).toFixed(2)+" MB" : ((file.size) / (1 * 1000)).toFixed(2) +" KB"}`+
-                    "</label>" +
+        item_html =
+            "<div class='file-list-border-wrapper'>" +
+            "<input type='button' " +
+            "id='" + $.md5(file.name) +
+            "' value='" + file.name +
+            "' class='file-list-border-item'>" +
+            "<label name=" + $.md5(file.name) + " style='font-size: 13px; text-align: center; margin-left: 5px'>" + `${(file.size > 1000 * 1024) ?
+                ((file.size) / (1024 * 1000)).toFixed(2) + " MB" : ((file.size) / (1 * 1000)).toFixed(2) + " KB"}` +
+            "</label>" +
             "</div>"
         $(".file-list-input-wrapper").append(item_html);
     }
-    if (upload_files.size < 0){
-        cancelAction();  
-    } 
+    if (upload_files.size < 0) {
+        cancelAction();
+    }
 }
 
 // Click index download button will do this 
@@ -131,34 +131,35 @@ $('#download').on('click', () => {
         type: 'POST',
         url: "./files/get_list",
         dataType: "json",
-        headers:{"auth_code":localStorage.getItem("auth_code")},
+        headers: { "auth_code": localStorage.getItem("auth_code") },
         success: (res) => {
             console.log(res);
-            appendFileToList(res.file_list.map(file => ({
+            appendFileToList(res.data.file_list.map(file => ({
                 name: file.file_name,
                 size: file.size
             })))
+            toptips(res);
         },
         error: (error) => {
             console.log(error);
         }
     });
     // change submit button value when all data was loading fish 
-   
-    
+
+
 })
 
 // This is what will do when click file list element 
 $('.file-list-input-wrapper').on('click', ".file-list-border-item", (e) => {
     const chose_file_item = $(e.target)
-    let file_id = $(e.target).attr( "id" );
+    let file_id = $(e.target).attr("id");
     let css_value = "linear-gradient(to left, rgb(232, 25, 139), rgb(14, 180, 221))"
-    if (chose_file_item.css("background-image") == css_value){
-        chose_file_item.css("background-image","");
+    if (chose_file_item.css("background-image") == css_value) {
+        chose_file_item.css("background-image", "");
         select_files.delete(file_id);
-    }else{
+    } else {
         chose_file_item.css("background-image", css_value)
-        select_files.set(file_id, $(e.target).attr( "value" ));
+        select_files.set(file_id, $(e.target).attr("value"));
     }
 })
 
@@ -166,14 +167,14 @@ $('.file-list-input-wrapper').on('click', ".file-list-border-item", (e) => {
 $("#del").on("click", () => {
     switch ($(".file-list-header").text()) {
         case "Upload Files":
-            for (let file_id of select_files.keys() ){
+            for (let file_id of select_files.keys()) {
                 $("#" + file_id).parent().remove();
-                if ($("#submit").text() === "Upload"){
+                if ($("#submit").text() === "Upload") {
                     upload_files.delete(file_id);
                 }
                 select_files.delete(file_id);
             }
-            if (upload_files.size === 0){
+            if (upload_files.size === 0) {
                 cancelAction()
             }
             break;
@@ -184,10 +185,10 @@ $("#del").on("click", () => {
                 type: 'POST',
                 url: "./files/delete",
                 dataType: "json",
-                data: {"file_names": file_names},
-                headers:{"auth_code":localStorage.getItem("auth_code")},
+                data: { "file_names": file_names },
+                headers: { "auth_code": localStorage.getItem("auth_code") },
                 success: (ret) => {
-                    for (file_id of select_files.keys()){
+                    for (file_id of select_files.keys()) {
                         // 从界面表单中移除
                         $("#" + file_id).parent().remove();
                         // 从选中的文件列表当中移除
@@ -195,9 +196,10 @@ $("#del").on("click", () => {
                         $("#download").trigger('click');
                     }
                     console.log(ret);
+                    toptips(ret);
                 }
             });
-            break    
+            break
         default:
             break;
     }
@@ -206,34 +208,34 @@ $("#del").on("click", () => {
 
 // submit button will upload file(s) or download file(s)
 $('#submit').on('click', () => {
-    switch($("#submit").text()){
+    switch ($("#submit").text()) {
         case "Upload":
             // TODO: Should get right upload file list, and to upload to remote server 
             // should use for of to upload file to reshow loading progress bar
             uploadAllToServer(upload_files);
             // should close file list when all file are upload successfully
-            
-            break; 
+
+            break;
         case "Download":
             // TODO: Should need get all file user selected file on right file list window
-            select_files.forEach((value, key) => {download_files.set(key, value)})
+            select_files.forEach((value, key) => { download_files.set(key, value) })
             // need use for of do those downloads to reshow download pregress bar
             downloadAllToServer(download_files);
             // should close download file list when user down load all files he need
             // $('#file-list').hide(500);
             break;
-        default: 
+        default:
             alert("Please Click Upload Or Download Button And Select File(s) First!")
     }
 
 })
 
 $("#cancel").on("click", () => {
-   cancelAction()
+    cancelAction()
 })
 
 const uploadAllToServer = (files) => {
-    for (let file of files){   
+    for (let file of files) {
         var data = new FormData();
         data.append("file", file[1]);
         data.append("auth_code", "jjk");
@@ -244,27 +246,28 @@ const uploadAllToServer = (files) => {
             cache: false,
             processData: false,
             contentType: false,
-            headers:{"auth_code":localStorage.getItem("auth_code")},
+            headers: { "auth_code": localStorage.getItem("auth_code") },
             xhr: () => {
                 let xhr = $.ajaxSettings.xhr();
                 if (xhr.upload) {
                     xhr.upload.addEventListener("progress", (event) => {
                         //已经上传大小情况
-                        let loaded = event.loaded;     
+                        let loaded = event.loaded;
                         // 附件总大小 
                         let tot = event.total;
                         // 上传百分比
                         let per = Math.floor(100 * loaded / tot);
-                        $("#" + $.md5(file[1].name)).css({ "width": per + "%", "transition":"0.2s"}).val(per + "%");
+                        $("#" + $.md5(file[1].name)).css({ "width": per + "%", "transition": "0.2s" }).val(per + "%");
                         console.log("已经上传大小：", loaded, "文件总大小：", tot, "上传百分比：", per);
                     }, false);
                     return xhr;
                 }
             },
             success: (ret) => {
-                $("#" + $.md5(file[1].name)).val(file[1].name).css({ "width": "70%"});
+                $("#" + $.md5(file[1].name)).val(file[1].name).css({ "width": "70%" });
                 // 下载完毕的文件需要将文件从文件的选择列表当中进行移除
                 files.delete($.md5(file[1].name));
+                toptips(ret);
                 console.log(ret);
             }
         });
@@ -272,31 +275,17 @@ const uploadAllToServer = (files) => {
 }
 
 const downloadAllToServer = (files) => {
-    for (let file_name of files.values()) {   
+    for (let file_name of files.values()) {
         downLoadByUrl("./files/download/", file_name);
-        // $.ajax({
-        //     type: 'POST',
-        //     url: "./files/download",
-        //     dataType: "json",
-        //     data: {"file_name": file_name},
-        //     headers:{"auth_code": localStorage.getItem("auth_code")},
-        //     success: (ret) => {
-        //         $("#" + $.md5(file_name)).val(file_name + " √");
-        //         console.log(ret);
-        //         // 需要将下载完成的文件从选中的文件当中进行移除
-        //         files.delete($.md5(file_name))
-        //         // 还需要对选中的文件进行恢复未选中的状态
-        //     }
-        // });
     }
 }
 
-function downLoadByUrl(url, file_name){
+downLoadByUrl = (url, file_name) => {
     var xhr = new XMLHttpRequest();
+    //GET请求,请求路径url,async(是否异步)
+    xhr.open('GET', url + "?file_name=" + file_name, true);
     //设置请求头参数的方式,如果没有可忽略此行代码
     xhr.setRequestHeader("auth_code", localStorage.getItem("auth_code"));
-    //GET请求,请求路径url,async(是否异步)
-    xhr.open('GET', url+ "?file_name=" + file_name, true);
     //设置响应类型为 blob
     xhr.responseType = 'blob';
     //关键部分
@@ -306,7 +295,7 @@ function downLoadByUrl(url, file_name){
 
             $("#" + $.md5(file_name)).val(file_name + " √");
             // 需要将下载完成的文件从选中的文件当中进行移除
-            files.delete($.md5(file_name))
+            download_files.delete($.md5(file_name))
             // 还需要对选中的文件进行恢复未选中的状态
 
             var blob = this.response;
@@ -318,7 +307,7 @@ function downLoadByUrl(url, file_name){
             var url = URL.createObjectURL(blob);
 
             a.href = url;
-            a.download=filename;
+            a.download = filename;
             a.click();
             //释放之前创建的URL对象
             window.URL.revokeObjectURL(url);
@@ -328,3 +317,36 @@ function downLoadByUrl(url, file_name){
     xhr.send();
 }
 
+//顶部提示
+toptips = (res) => {
+    const time = 1000;
+    const text = res.message;
+
+    switch (Math.floor(res.code / 1e3)) {
+        case 200:
+            $('.toptips').css({ 'background': '#06ae56' }).text(text).fadeIn("200")
+            break;
+        case 400:
+            $('.toptips').css({ 'background': '#ffc300' }).text(text).fadeIn("200")
+            break;
+        case 403:
+            $('.toptips').css({ 'background': '#00947e' }).text(text).fadeIn("200")
+            break;
+        case 500:
+            $('.toptips').css({ 'background': '#fa5151' }).text(text).fadeIn("200")
+            break;
+        default:
+            //   $('.toptips').css({'background': '#06ae56'}).text(text).fadeIn("200")
+            $('.toptips').css({ 'background': '#fa5151' }).text('Error:toptips() 发生错误').fadeIn("200")
+            break;
+    }
+    $('body').css({ 'pointer-events': 'none' })
+    close(time)
+}
+// 关闭顶部提示
+close = (time) => {
+    setTimeout(() => {
+        $('body').removeAttr('style', '')
+        $('.toptips').fadeOut("200")
+    }, time)
+}
