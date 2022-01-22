@@ -4,18 +4,23 @@ import fs from "fs";
 import mime from "mime";
 import morgan from "morgan";
 import multer from "multer";
-import { FILE } from "./utils/file_mgmt";
+import { FILE } from "./utils/config/file_mgmt";
 import { getLocalIp } from "./utils/get_server_ip";
-import { reqLimitCheck } from "./utils/req_limit_check";
+import { autoClearUserDir } from "./utils/auto_run_ontime/auto_run_clear_user_dir";
+import { autoClearReqLimitCache, reqLimitCheck } from "./utils/auto_run_ontime/auto_clear_req_limit";
 
 
 const app = express();
 // const upload = multer({ dest: FILE.ROOT_DIR });
 const upload = multer({ dest: FILE.TEMP_DIR });
-const jsonParser = bodyParser.json({ type: 'application/*+json' });
+// const jsonParser = bodyParser.json({ type: 'application/*+json' });
 const urlParser = bodyParser.urlencoded();
 
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms'))
+// registry periodic duty
+autoClearUserDir(FILE.CHECK_USER_DIR_CYCLE as number, FILE.CLEAR_USER_DIR_CYCLE as number)
+autoClearReqLimitCache(FILE.CLEAR_REQ_LIMIT_CACHE_CYCLE as number)
+
+app.use(morgan(':date[web] :method :url :status :res[content-length] - :response-time ms'))
 
 
 app.use(express.static("static"));
@@ -44,7 +49,6 @@ app.use("/files", (req, res, next) => {
     return res.status(500).json({ code: 500100, message: "Something was wrong in user dir check or The server was attacked!" })
   }
 })
-
 
 
 // get file list

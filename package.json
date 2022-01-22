@@ -7,7 +7,6 @@
     "url": "git@github.com:Jingjiasheng/file-management.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node src/index.ts"
   },
   "author": "j_jiasheng@qq.com",

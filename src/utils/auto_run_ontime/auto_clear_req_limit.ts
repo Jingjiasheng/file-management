@@ -1,4 +1,3 @@
-
 const req_cache: Map<string, number> = new Map();
 
 const reqLimitCheck = (ip: string): boolean => {
@@ -11,11 +10,10 @@ const reqLimitCheck = (ip: string): boolean => {
 }
 
 // auto clear req_info every 1 minute
-const interval = setInterval(() => {
+const autoClearReqLimitCache = (clear_req_cycle_time: number) => setInterval(() => {
     console.log(`${Date()} Start Clear ===> `, req_cache);
     req_cache.clear();
     console.log(`${Date()} Clear Finish ===> `, req_cache);
-}, 1000 * 30)
+}, 1000 * clear_req_cycle_time)
 
-export { reqLimitCheck, interval };
-
+export { autoClearReqLimitCache, reqLimitCheck }

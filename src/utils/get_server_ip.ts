@@ -4,7 +4,7 @@ export const getLocalIp = (): string => {
   const os_type = os.type(); //系统类型
   const net_info = os.networkInterfaces()!; //网络信息
   let ip = "";
-  if (os_type === "Windows_NT") { 
+  if (os_type === "Windows_NT") {
     for (const dev in net_info) {
       //win7的网络信息中显示为本地连接，win10显示为以太网
       if (dev === "本地连接" || dev === "以太网") {
