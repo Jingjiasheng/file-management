@@ -11,12 +11,12 @@ const reqLimitCheck = (ip: string): boolean => {
 
 // auto clear req_info every 1 minute
 const autoClearReqLimitCache = (clear_req_cycle_time: number) => {
-    console.log("Aleardy Init AutoClearReqLimitCache Cycle task ======================================")
+    console.log("=============> Aleardy Init AutoClearReqLimitCache Cycle task!")
     setInterval(() => {
-        console.log(`${Date()} Start Clear Req Limit Cache  =======================> `);
-        console.log(req_cache);
+        console.log(`################################################################\n#Date time: ${new Date()}\n#Purpose:   Clear Req Limit Cache`)
+        console.log("#Req_Auth: ",req_cache);
         req_cache.clear();
-        console.log(`${Date()} Req Limit Cache Clear Finish =======================> `);
+        console.log(`################################################################`);
     }, 1000 * clear_req_cycle_time)
 };
 

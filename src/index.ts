@@ -9,6 +9,7 @@ import { getLocalIp } from "./utils/get_server_ip";
 import { autoClearUserDir } from "./utils/auto_run_ontime/auto_run_clear_user_dir";
 import { autoClearReqLimitCache, reqLimitCheck } from "./utils/auto_run_ontime/auto_clear_req_limit";
 import { checkSetAuth, clearIpBindAuth } from "./utils/auto_run_ontime/auto_clear_ip_bind_auths";
+import { paramLogger } from "./utils/log_fmt/logger";
 
 
 const app = express();
@@ -23,7 +24,7 @@ autoClearUserDir(FILE.CHECK_USER_DIR_CYCLE as number, FILE.CLEAR_USER_DIR_CYCLE 
 autoClearReqLimitCache(FILE.CLEAR_REQ_LIMIT_CACHE_CYCLE as number)
 clearIpBindAuth(FILE.CLEAR_IP_BIND_AUTH_CYCLE as number);
 
-app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'));
+app.use(paramLogger);
 
 app.use(express.static("static"));
 app.set("view engine", "ejs");
@@ -66,7 +67,7 @@ app.post("/files/get_list", urlParser, (req, res) => {
         ...(fs.statSync(user_dri + file_name)),
         file_name: file_name,
         file_path: user_dri + file_name,
-        mime_type: mime.getType(user_dri + file_name)
+        mime_type: mime.lookup(user_dri + file_name)
       })
     })
     files_infos = files_infos.slice(0, 5)

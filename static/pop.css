@@ -20,7 +20,8 @@
 }
 
 .modal .container {
-  width: 500px;
+  padding: 10px;
+  width: 600px;
   height: 550px;
   background-color: #fff;
   position: absolute;
@@ -33,7 +34,8 @@
 }
 
 .pop {
-  padding: 1em;
+  width: 100%;
+  height: 100%;
   /* background: url('dd.jpg') no-repeat 100% 100%; */
   /* position: relative; */
   -webkit-box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.15);
@@ -41,6 +43,7 @@
   box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.15);
   border-radius: 5px;
   color: #000;
+  font-size: smaller;
 }
 
 .pop::before {
@@ -66,7 +69,7 @@ h4 {
 #submit_auth_code {
   width: 100%;
   border: none;
-  background-color: rgb(255, 149, 255);
+  background-color: #E91E63;
   color: #eee;
   border-radius: 5px;
   height: 40px;
@@ -74,22 +77,23 @@ h4 {
 }
 
 #submit_auth_code:hover {
-  background: #1100ff;
-  opacity: 0.5;
+  background: #E91E63;
+  opacity: 1;
 }
 
 #submit_auth_code:active {
   height: 40px;
   color: white;
   border-radius: 5px;
-  background: #4a9bfa;
-  opacity: 0.5;
+  background: #FF4081;
+  opacity: 1;
   filter: blur(0);
 }
 /* ---------------input--------- */
 .wrapper {
+  margin-top: 50px;
   width: 100%;
-  background-color: rgb(255, 255, 255);
+  /* background-color: rgb(255, 255, 255); */
   /* padding: 20px ; */
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   filter: blur(0);
@@ -103,12 +107,15 @@ h4 {
   filter: blur(0);
 }
 .wrapper .input-data input {
+  background-color: transparent;
+  outline: none; 
+  font-size: 25px; 
+  font-weight: bold;
   width: 100%;
   height: 100%;
   border: none;
   border-radius: 5px;
-  border-bottom: 2px solid silver;
-  font-size: 17px;
+  /* border-bottom: 1px solid silver; */
   text-align: center;
   filter: blur(0);
   backdrop-filter: blur(10px) brightness(110%);
@@ -117,18 +124,21 @@ h4 {
   -ms-border-radius: 5px;
   -o-border-radius: 5px;
 }
+
 .input-data input:focus ~ label,
 .input-data input:valid ~ label {
   transform: translateY(-50px);
-  font-size: 20px;
-  color: rgb(255, 149, 255);
+  font-size: 25px;
+  color: #FF4081;
 }
 .wrapper .input-data label {
-  margin-left: 10px;
+  width: 100%;
+  height: 50px;
+  font-size: 25px;
+  text-align: center;
+  color: #E91E63;
   position: absolute;
-  bottom: 10px;
   left: 0;
-  color: grey;
   pointer-events: none;
   transition: all 0.3s ease;
 }
@@ -144,7 +154,7 @@ h4 {
   content: "";
   height: 100%;
   width: 100%;
-  background: rgb(255, 149, 255);
+  background: #FF4081;
   transform: scaleX(0);
   transition: transform 0.3s ease;
 }

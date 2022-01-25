@@ -7,6 +7,7 @@ const select_files = new Map();
 // show upload/download file list on right
 showFileList = (type) => {
     $("#file-list").show(500);
+    $("#cancel").text("CLOSE");
     switch (type) {
         case "upload":
             $(".file-list-header").text("Upload Files");
@@ -36,7 +37,15 @@ cleanFileList = () => {
 }
 
 $("#cancel").on("click", function () {
-    cancelAction();
+    // close file list if text is close
+    // reset auth_code if text is exit
+    if ($("#cancel").text() == "Close") {
+        cancelAction();
+    }
+    if ($("#cancel").text() == "Exit") {
+        localStorage.removeItem("auth_code");
+        window.location.reload ()
+    }
 })
 
 cancelAction = () => {
@@ -44,6 +53,7 @@ cancelAction = () => {
     enableButton();
     cleanFileList();
     $("#submit").text("Submit");
+    $("#cancel").text("Exit");
 }
 
 disableButton = (type) => {
@@ -302,7 +312,7 @@ downLoadByUrl = (url, file_name) => {
         //如果请求执行成功
         if (this.status == 200) {
 
-            $("#" + $.md5(file_name)).val(file_name + " √");
+            $("#" + $.md5(file_name)).val(file_name + " √").css({ "width": "70%" });
             // 需要将下载完成的文件从选中的文件当中进行移除
             download_files.delete($.md5(file_name))
             // 还需要对选中的文件进行恢复未选中的状态

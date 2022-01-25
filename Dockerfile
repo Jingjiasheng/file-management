@@ -7,7 +7,8 @@ COPY . .
 RUN npm install \
   && npm install ts-node --global 
 
-ENV ROOT_PATH_FILE=/server/root
+ENV ROOT_DIR=/server/root/
+ENV TEMP_DIR=/server/root/temp/
 ENV NODE_ENV=prod
 ENV PORT=80
 EXPOSE 80

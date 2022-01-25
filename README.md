@@ -2,13 +2,13 @@
 
 ## This one method to run it with ts-node ->
 
-1. Download source code to local
-    > git clone git@github.com:Jingjiasheng/file-management.git
+1. Download source code to local and come to project dir
+    > git clone git@github.com:Jingjiasheng/file-management.git && cd file-management
 
 2. Npm install lib
     > npm i
 
-3. Config the root dir that file will saved on your server
+3. Config the root dir where is file will saved on your server
     > cd file-management && vim config.ts // or use other editor which you can open and update config.ts
 
 4. Ok, the last step is run:
@@ -23,8 +23,11 @@
 
 ## This is other way to run it with docker ->
 
-1. Are you looking forward to it? Wait first. I haven't finished yet!
-    > lalala
+1. First you need pull docker package from my github repo!
+    > docker pull lalala
+
+2. Then type docker images you will see an images with name `file-management`, yes!, that's it, you can run with docker command such as: 
+    > docker run --name myfile -p 4040:80 -v /home/file:/server/root  e18f49ec23ba
 
 ## Next step
 
