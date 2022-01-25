@@ -8,6 +8,7 @@ import { FILE } from "./utils/config/file_mgmt";
 import { getLocalIp } from "./utils/get_server_ip";
 import { autoClearUserDir } from "./utils/auto_run_ontime/auto_run_clear_user_dir";
 import { autoClearReqLimitCache, reqLimitCheck } from "./utils/auto_run_ontime/auto_clear_req_limit";
+import { checkSetAuth, clearIpBindAuth } from "./utils/auto_run_ontime/auto_clear_ip_bind_auths";
 
 
 const app = express();
@@ -20,6 +21,7 @@ const urlParser = bodyParser.urlencoded();
 // registry periodic duty
 autoClearUserDir(FILE.CHECK_USER_DIR_CYCLE as number, FILE.CLEAR_USER_DIR_CYCLE as number)
 autoClearReqLimitCache(FILE.CLEAR_REQ_LIMIT_CACHE_CYCLE as number)
+clearIpBindAuth(FILE.CLEAR_IP_BIND_AUTH_CYCLE as number);
 
 app.use(morgan(':remote-addr - :remote-user [:date[clf]] ":method :url HTTP/:http-version" :status :res[content-length] ":referrer" ":user-agent"'));
 
@@ -37,6 +39,9 @@ app.use("/files", (req, res, next) => {
     }
     if (!req.headers.auth_code) {
       return res.status(400).json({ code: 400100, message: "You did not set your auth_code, please refresh page!" })
+    }
+    if (!checkSetAuth(req.ip, req.headers.auth_code as string)) {
+      return res.status(400).json({ code: 400100, message: "You set your auth too quickly, Please set again tomorrow!" })
     }
     const user_dri = FILE.genUserDir(req.headers.auth_code as string);
     // create file dir for new user if not exist
@@ -61,7 +66,7 @@ app.post("/files/get_list", urlParser, (req, res) => {
         ...(fs.statSync(user_dri + file_name)),
         file_name: file_name,
         file_path: user_dri + file_name,
-        mime_type: mime.lookup(user_dri + file_name)
+        mime_type: mime.getType(user_dri + file_name)
       })
     })
     files_infos = files_infos.slice(0, 5)

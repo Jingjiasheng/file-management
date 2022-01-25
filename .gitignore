@@ -5,3 +5,5 @@ root
 package-lock.json
 
 *.tar
+
+user_dir

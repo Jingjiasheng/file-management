@@ -10,7 +10,9 @@ const FILE = {
     // clear user dir every day  unit: sec
     CLEAR_USER_DIR_CYCLE: process.env.CLEAR_USER_DIR_CYCLE ?? 30 * 24 * 60 * 60,
     // clear user request limit  unit: sec
-    CLEAR_REQ_LIMIT_CACHE_CYCLE: process.env.CLEAR_REQ_LIMIT_CACHE_CYCLE ?? 1 * 30
+    CLEAR_REQ_LIMIT_CACHE_CYCLE: process.env.CLEAR_REQ_LIMIT_CACHE_CYCLE ?? 1 * 30,
+    // clear ip bind auths info  unit: sec
+    CLEAR_IP_BIND_AUTH_CYCLE: process.env.CLEAR_IP_BIND_AUTH_CYCLE ?? 24 * 60 * 60
 }
 
 export { FILE };

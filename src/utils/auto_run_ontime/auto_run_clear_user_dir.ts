@@ -41,6 +41,7 @@ const autoCleanUserFile = async (clear_user_dir_cycle_time: number): Promise<voi
 }
 
 export const autoClearUserDir = (check_user_dir_cycle_time: number, clear_user_dir_cycle_time: number) => {
+  console.log("Aleardy Init AutoClearUserDir Cycle task ======================================")
   setInterval(() => {
         console.log(`${Date()} Start Timeout File Check And Clear ============================================ `);
         autoCleanUserFile(clear_user_dir_cycle_time)
