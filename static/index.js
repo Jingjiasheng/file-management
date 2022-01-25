@@ -286,6 +286,15 @@ downLoadByUrl = (url, file_name) => {
     xhr.open('GET', url + "?file_name=" + file_name, true);
     //设置请求头参数的方式,如果没有可忽略此行代码
     xhr.setRequestHeader("auth_code", localStorage.getItem("auth_code"));
+    // set listener 
+    xhr.addEventListener("progress", function (evt) {
+        if (evt.lengthComputable) {
+            var per = Math.floor((evt.loaded / evt.total)* 100) ;
+            console.log(per);
+            // $("#progressing").html(per + "%");
+            $("#" + $.md5(file_name)).css({ "width": per + "%", "transition": "0.2s" }).val(per + "%");
+        }
+    }, false);
     //设置响应类型为 blob
     xhr.responseType = 'blob';
     //关键部分
