@@ -24,10 +24,10 @@
 ## This is other way to run it with docker ->
 
 1. First you need pull docker package from my github repo!
-    > docker pull lalala
+    > docker pull ghcr.io/jingjiasheng/file-management:latest
 
 2. Then type docker images you will see an images with name `file-management`, yes!, that's it, you can run with docker command such as: 
-    > docker run --name myfile -p 4040:80 -v /home/file:/server/root  e18f49ec23ba
+    > docker run --name myfile -p 4040:80 -v /home/file:/server/root  file-management:latest
 
 ## Next step
 
