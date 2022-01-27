@@ -151,7 +151,7 @@ $('#download').on('click', () => {
             toptips(res);
         },
         error: (error) => {
-            toptips(res);
+            toptips(error.responseJSON, 3);
             console.log(error);
         }
     });
@@ -282,7 +282,7 @@ const uploadAllToServer = (files) => {
                 console.log(ret);
             },
             error: (error) => {
-                toptips(res);
+                toptips(error.responseJSON, 3);
                 console.log(error);
             }
         });
@@ -341,9 +341,9 @@ downLoadByUrl = (url, file_name) => {
     xhr.send();
 }
 
-//顶部提示
-toptips = (res) => {
-    const time = 1000;
+//顶部提示 default close time unit: sec
+toptips = (res, time = 1) => {
+    // const time = 1000;
     const text = res.message;
 
     switch (Math.floor(res.code / 1e3)) {
@@ -365,7 +365,7 @@ toptips = (res) => {
             break;
     }
     $('body').css({ 'pointer-events': 'none' })
-    close(time)
+    close(time * 1000)
 }
 // 关闭顶部提示
 close = (time) => {

@@ -14,9 +14,7 @@
    return p[2] + "/" + p[1] + "/" + p[3] + ":" + p[4] + " " + p[5];
  });
  
- logger.token("requestParameters", (req: Request, _res: Response) => JSON.stringify(req.query) || "-");
- 
- logger.token("requestBody", (req: Request, _res: Response) => JSON.stringify(req.body) || "-");
+ logger.token("remote-addr", (req: Request, _res: Response) =>req.headers['x-forwarded-for'] as string || req.socket.remoteAddress as string);
  
  logger.format(
    "show_params",

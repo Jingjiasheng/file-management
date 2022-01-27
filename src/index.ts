@@ -35,13 +35,14 @@ app.get("/", (_request, response) => response.render("index"));
 
 app.use("/files", (req, res, next) => {
   try {
-    if (!reqLimitCheck(req.ip)) {
+    let ip = req.headers['x-forwarded-for'] as string || req.socket.remoteAddress as string;
+    if (!reqLimitCheck(ip)) {
       return res.status(403).json({ code: 403100, message: "Request too fast, do not attack or try again later!" })
     }
     if (!req.headers.auth_code) {
       return res.status(400).json({ code: 400100, message: "You did not set your auth_code, please refresh page!" })
     }
-    if (!checkSetAuth(req.ip, req.headers.auth_code as string)) {
+    if (!checkSetAuth(ip, req.headers.auth_code as string)) {
       return res.status(400).json({ code: 400100, message: "You set your auth too quickly, Please set again tomorrow!" })
     }
     const user_dri = FILE.genUserDir(req.headers.auth_code as string);
