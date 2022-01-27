@@ -151,6 +151,7 @@ $('#download').on('click', () => {
             toptips(res);
         },
         error: (error) => {
+            toptips(res);
             console.log(error);
         }
     });
@@ -279,6 +280,10 @@ const uploadAllToServer = (files) => {
                 files.delete($.md5(file[1].name));
                 toptips(ret);
                 console.log(ret);
+            },
+            error: (error) => {
+                toptips(res);
+                console.log(error);
             }
         });
     }
